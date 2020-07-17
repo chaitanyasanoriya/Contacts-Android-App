@@ -24,6 +24,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lambton.projects.contact_chaitanya_c0777253_android.R;
+import com.lambton.projects.contact_chaitanya_c0777253_android.Utils;
 import com.lambton.projects.contact_chaitanya_c0777253_android.activities.ContactDetailsActivity;
 import com.lambton.projects.contact_chaitanya_c0777253_android.models.Contact;
 
@@ -119,7 +120,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         {
             initials += String.valueOf(contact.getLastName().charAt(0));
         }
-        holder.mImageView.setImageBitmap(createImageRounded(mContext,175,175,initials));
+        holder.mImageView.setImageBitmap(Utils.createImageRounded(mContext,175,175,initials));
         holder.mMainLayout.setOnClickListener(view ->
         {
             Intent intent = new Intent(mContext, ContactDetailsActivity.class);
@@ -141,36 +142,6 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                 holder.mHiddenBtn.setBackground(mContext.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_24));
             }
         });
-    }
-
-    public static Bitmap createImageRounded(Context context, int width, int height, String name)
-    {
-        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        Paint paintCicle = new Paint();
-        Paint paintText = new Paint();
-
-        Rect rect = new Rect(0, 0, width, height);
-        RectF rectF = new RectF(rect);
-        float density = context.getResources().getDisplayMetrics().density;
-        float roundPx = 100*density;
-
-        paintCicle.setColor(context.getColor(R.color.colorPrimaryDark));
-        paintCicle.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-
-// Set Border For Circle
-        paintCicle.setStyle(Paint.Style.FILL);
-
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paintCicle);
-
-        paintText.setColor(Color.WHITE);
-        paintText.setTextSize(72);
-
-        canvas.drawText(name, 75 - 23, 75 + 25, paintText);
-
-        return output;
     }
 
     private String getName(Contact contact)
