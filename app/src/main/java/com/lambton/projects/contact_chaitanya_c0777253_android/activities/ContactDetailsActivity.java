@@ -64,14 +64,22 @@ public class ContactDetailsActivity extends AppCompatActivity
         if (mContact == null)
         {
             mDeleteButton.setVisibility(View.GONE);
-            mHeadingTextView.setText("Update Contact");
             return;
         }
-        mFNameEditText.setText(mContact.getFirstName());
-        mLNameEditText.setText(mContact.getLastName());
+        String f_name = mContact.getFirstName();
+        String l_name = mContact.getLastName();
+        mFNameEditText.setText(f_name);
+        mLNameEditText.setText(l_name);
         mPhoneEditText.setText(mContact.getPhoneNumber());
         mEmailEditText.setText(mContact.getEmail());
         mAddressEditText.setText(mContact.getAddress());
+        mFInitial = String.valueOf(f_name.charAt(0));
+        if(l_name != null && !l_name.isEmpty())
+        {
+            mLInitial = String.valueOf(l_name.charAt(0));
+        }
+        updateImage();
+        mHeadingTextView.setText(R.string.update_contact);
     }
 
     public void saveClicked(View view)
