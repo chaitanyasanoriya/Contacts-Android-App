@@ -13,7 +13,7 @@
         android:layout_margin="10dp"
         android:text="Contacts"
         android:textColor="@android:color/black"
-        android:textSize="32sp"
+        android:textSize="36sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,14 +28,20 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/contacts_textview" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/contacts_textview"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@id/num_contacts_textview"
-        app:layout_constraintTop_toBottomOf="@id/contacts_textview" />
+        app:layout_constraintTop_toBottomOf="@id/searchview"/>
 
     <TextView
         android:id="@+id/no_contacts_textview"

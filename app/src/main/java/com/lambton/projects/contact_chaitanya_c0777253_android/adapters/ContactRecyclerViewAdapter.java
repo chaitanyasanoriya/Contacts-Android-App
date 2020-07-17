@@ -91,7 +91,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         {
             initials += String.valueOf(contact.getLastName().charAt(0));
         }
-        holder.mImageView.setImageBitmap(createImageRounded(mContext,200,200,initials));
+        holder.mImageView.setImageBitmap(createImageRounded(mContext,175,175,initials));
         holder.mMainLayout.setOnClickListener(view ->
         {
             if(holder.mAdditionalInfoLayout.getVisibility() == View.VISIBLE)

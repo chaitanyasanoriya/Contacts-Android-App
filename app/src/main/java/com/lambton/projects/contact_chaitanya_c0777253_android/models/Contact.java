@@ -5,8 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "contact_table")
-public class Contact
+public class Contact implements Serializable
 {
     @PrimaryKey(autoGenerate = true)
     private int id;
