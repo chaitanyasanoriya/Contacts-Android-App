@@ -33,6 +33,7 @@
         android:id="@+id/delete_btn"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:onClick="deleteClicked"
         android:background="@drawable/ic_baseline_delete_24"
         app:layout_constraintBottom_toBottomOf="@id/heading_textview"
         app:layout_constraintDimensionRatio="1:1"

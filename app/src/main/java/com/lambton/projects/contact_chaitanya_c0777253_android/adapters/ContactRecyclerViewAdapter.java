@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lambton.projects.contact_chaitanya_c0777253_android.R;
+import com.lambton.projects.contact_chaitanya_c0777253_android.activities.ContactDetailsActivity;
 import com.lambton.projects.contact_chaitanya_c0777253_android.models.Contact;
 
 import java.util.List;
@@ -40,6 +42,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         public TextView mPhoneTextView;
         public TextView mEmailTextView;
         public TextView mAddressTextView;
+        public Button mHiddenBtn;
         public ConstraintLayout mMainLayout;
         public ConstraintLayout mAdditionalInfoLayout;
 
@@ -53,6 +56,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             mAddressTextView = itemView.findViewById(R.id.address_textview);
             mMainLayout = itemView.findViewById(R.id.main_layout);
             mAdditionalInfoLayout = itemView.findViewById(R.id.additional_info_layout);
+            mHiddenBtn = itemView.findViewById(R.id.hidden_btn);
         }
     }
 
@@ -86,6 +90,30 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         holder.mNameTextView.setText(getName(contact));
         holder.mEmailTextView.setText(contact.getEmail());
         holder.mAddressTextView.setText(contact.getAddress());
+        if(contact.getEmail().isEmpty() && contact.getAddress().isEmpty())
+        {
+            holder.mHiddenBtn.setVisibility(View.GONE);
+        }
+        else
+        {
+            holder.mHiddenBtn.setVisibility(View.VISIBLE);
+        }
+        if(contact.getEmail().isEmpty())
+        {
+            holder.mEmailTextView.setVisibility(View.GONE);
+        }
+        else
+        {
+            holder.mEmailTextView.setVisibility(View.VISIBLE);
+        }
+        if(contact.getAddress().isEmpty())
+        {
+            holder.mAddressTextView.setVisibility(View.GONE);
+        }
+        else
+        {
+            holder.mAddressTextView.setVisibility(View.VISIBLE);
+        }
         String initials = String.valueOf(contact.getFirstName().charAt(0));
         if(!contact.getLastName().isEmpty())
         {
@@ -94,23 +122,23 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         holder.mImageView.setImageBitmap(createImageRounded(mContext,175,175,initials));
         holder.mMainLayout.setOnClickListener(view ->
         {
+            Intent intent = new Intent(mContext, ContactDetailsActivity.class);
+            intent.putExtra("contact",contact);
+            mContext.startActivity(intent);
+        });
+        holder.mHiddenBtn.setOnClickListener(view ->
+        {
             if(holder.mAdditionalInfoLayout.getVisibility() == View.VISIBLE)
             {
                 System.out.println("setting hiding");
                 holder.mAdditionalInfoLayout.setVisibility(View.GONE);
+                holder.mHiddenBtn.setBackground(mContext.getDrawable(R.drawable.ic_baseline_keyboard_arrow_down_24));
             }
             else
             {
                 System.out.println("setting visible");
                 holder.mAdditionalInfoLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        holder.mMainLayout.setOnLongClickListener(new View.OnLongClickListener()
-        {
-            @Override
-            public boolean onLongClick(View view)
-            {
-                return false;
+                holder.mHiddenBtn.setBackground(mContext.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_24));
             }
         });
     }
