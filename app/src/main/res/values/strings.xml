@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">contact_chaitanya_c0777253_android</string>
+    <string name="app_name">Contacts</string>
     <string name="number_of_contacts">Number of Contacts: </string>
     <string name="title_activity_contact_details">ContactDetailsActivity</string>
     <!--
