@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,16 +86,22 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         holder.mNameTextView.setText(getName(contact));
         holder.mEmailTextView.setText(contact.getEmail());
         holder.mAddressTextView.setText(contact.getAddress());
-        String initials = contact.getFirstName().charAt(0) + String.valueOf(contact.getLastName().charAt(0));
-        holder.mImageView.setImageBitmap(createImage(50,50,mContext.getColor(R.color.colorPrimaryDark),initials));
+        String initials = String.valueOf(contact.getFirstName().charAt(0));
+        if(!contact.getLastName().isEmpty())
+        {
+            initials += String.valueOf(contact.getLastName().charAt(0));
+        }
+        holder.mImageView.setImageBitmap(createImageRounded(mContext,200,200,initials));
         holder.mMainLayout.setOnClickListener(view ->
         {
             if(holder.mAdditionalInfoLayout.getVisibility() == View.VISIBLE)
             {
+                System.out.println("setting hiding");
                 holder.mAdditionalInfoLayout.setVisibility(View.GONE);
             }
             else
             {
+                System.out.println("setting visible");
                 holder.mAdditionalInfoLayout.setVisibility(View.VISIBLE);
             }
         });
@@ -107,18 +115,34 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         });
     }
 
-    public Bitmap createImage(int width, int height, int color, String name) {
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint2 = new Paint();
-        paint2.setColor(color);
-        canvas.drawRect(0F, 0F, (float) width, (float) height, paint2);
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(72);
-        paint.setTextScaleX(1);
-        canvas.drawText(name, 75 - 25, 75 + 20, paint);
-        return bitmap;
+    public static Bitmap createImageRounded(Context context, int width, int height, String name)
+    {
+        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        Paint paintCicle = new Paint();
+        Paint paintText = new Paint();
+
+        Rect rect = new Rect(0, 0, width, height);
+        RectF rectF = new RectF(rect);
+        float density = context.getResources().getDisplayMetrics().density;
+        float roundPx = 100*density;
+
+        paintCicle.setColor(context.getColor(R.color.colorPrimaryDark));
+        paintCicle.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+
+// Set Border For Circle
+        paintCicle.setStyle(Paint.Style.FILL);
+
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paintCicle);
+
+        paintText.setColor(Color.WHITE);
+        paintText.setTextSize(72);
+
+        canvas.drawText(name, 75 - 23, 75 + 25, paintText);
+
+        return output;
     }
 
     private String getName(Contact contact)
