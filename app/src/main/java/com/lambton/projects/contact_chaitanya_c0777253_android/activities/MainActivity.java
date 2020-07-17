@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
                 List<Contact> contacts = new ArrayList<>();
                 for(Contact contact: mContactList)
                 {
-                    if(contact.getFirstName().contains(query) || contact.getLastName().contains(query))
+                    if(contact.getFirstName().toLowerCase().contains(query.toLowerCase()) || contact.getLastName().toLowerCase().contains(query.toLowerCase()))
                     {
                         contacts.add(contact);
                     }
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
                 List<Contact> contacts = new ArrayList<>();
                 for(Contact contact: mContactList)
                 {
-                    if(contact.getFirstName().contains(newText) || contact.getLastName().contains(newText))
+                    if(contact.getFirstName().toLowerCase().contains(newText.toLowerCase()) || contact.getLastName().toLowerCase().contains(newText.toLowerCase()))
                     {
                         contacts.add(contact);
                     }
