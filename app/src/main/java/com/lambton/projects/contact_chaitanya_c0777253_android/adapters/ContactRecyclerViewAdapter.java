@@ -35,6 +35,19 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     private List<Contact> mContactList;
     private Context mContext;
 
+    public Contact deleteContact(int position)
+    {
+        Contact contact = mContactList.remove(position);
+        this.notifyItemRemoved(position);
+        return contact;
+    }
+
+    public void addContact(Contact contact, int position)
+    {
+        mContactList.add(position,contact);
+        this.notifyItemInserted(position);
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder
     {

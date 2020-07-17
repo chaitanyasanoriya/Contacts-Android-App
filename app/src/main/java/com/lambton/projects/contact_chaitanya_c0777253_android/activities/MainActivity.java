@@ -1,16 +1,23 @@
 package com.lambton.projects.contact_chaitanya_c0777253_android.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lambton.projects.contact_chaitanya_c0777253_android.R;
 import com.lambton.projects.contact_chaitanya_c0777253_android.adapters.ContactRecyclerViewAdapter;
 import com.lambton.projects.contact_chaitanya_c0777253_android.models.Contact;
@@ -18,6 +25,9 @@ import com.lambton.projects.contact_chaitanya_c0777253_android.viewmodels.Contac
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -53,24 +63,18 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-//        getContacts();
-    }
-
     private void setupRecyclerView()
     {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mContactRecyclerViewAdapter = new ContactRecyclerViewAdapter(mContactList, this);
         mRecyclerView.setAdapter(mContactRecyclerViewAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mSimpleCallBack);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     private void setContacts(List<Contact> contacts)
     {
-//        mContactList = mContactViewModel.getAllContacts();
         if(contacts != null && contacts.size() > 0)
         {
             mNoContactsTextView.setVisibility(View.GONE);
@@ -147,4 +151,42 @@ public class MainActivity extends AppCompatActivity
     {
         mContactNumTextView.setText(getString(R.string.number_of_contacts)+" "+size);
     }
+
+    ItemTouchHelper.SimpleCallback mSimpleCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT)
+    {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target)
+        {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction)
+        {
+            int position = viewHolder.getAdapterPosition();
+            if(direction == ItemTouchHelper.LEFT)
+            {
+                Contact contact = mContactRecyclerViewAdapter.deleteContact(position);
+                 mContactViewModel.delete(contact);
+                Snackbar.make(mRecyclerView,"Deleted "+contact.getFirstName(),Snackbar.LENGTH_LONG).setAction("Undo", v ->
+                {
+                    mContactRecyclerViewAdapter.addContact(contact,position);
+                    mContactViewModel.insert(contact);
+                }).show();
+            }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive)
+        {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.red))
+                    .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_white_24)
+                    .addSwipeLeftLabel("Delete")
+                    .setSwipeLeftLabelColor(Color.WHITE)
+                    .create()
+                    .decorate();
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
 }
