@@ -215,4 +215,9 @@ public class ContactDetailsActivity extends AppCompatActivity
         {
         }
     };
+
+    public void backClicked(View view)
+    {
+        finish();
+    }
 }
