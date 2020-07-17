@@ -42,6 +42,8 @@ The user should be able to:
 
 ![Deleting Contacts](screenshots/delete.gif)
 ![Deleting Contacts Dark Mode](screenshots/delete-night.gif)
+![Swipe to Delete Contacts](screenshots/delete-swipe.gif)
+![Swipe to Delete Contacts Dark Mode](screenshots/delete-swipe-night.gif)
 
 ### Splash Screen:
 
